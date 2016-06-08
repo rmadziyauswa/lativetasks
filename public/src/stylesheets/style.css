@@ -1,0 +1,59 @@
+body {
+  padding: 50px;
+  font-family: 'Playball', cursive;
+}
+
+
+
+.txtTask 
+{
+	border: none;
+	font-size: 22px;
+	margin: 0 auto;
+	background: none;
+	text-align: center;
+	padding: 5%;
+	color: blue;
+	width: 100%;
+	height: auto;
+}
+
+.txtCompletedTask 
+{
+	border: none;
+	font-size: 22px;
+	margin: 0 auto;
+	color: #8B0907;
+	background: none;
+	text-align: center;
+	padding: 5%;
+text-decoration: line-through;
+	width: 100%;
+	height: auto;
+}
+
+
+.divTask
+{
+	background-color: #F18803;
+	max-width: 400px;
+	max-height: 400px;
+	width: auto;
+	height: auto;
+	margin: 20px 20px;
+
+}
+
+.divActionIcon .glyphicon
+{
+	font-size: 15px;
+	color: #2793D9;
+	cursor: pointer;
+}
+
+.divActionArea
+{
+	display: inline-block;
+	width: 60px;
+
+}
