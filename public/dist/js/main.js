@@ -22154,7 +22154,7 @@ var TaskList = React.createClass({displayName: "TaskList",
 module.exports = TaskList;
 },{"../actions/TaskActions":173,"../stores/TaskStore":182,"../utils/TaskAPI":183,"./AddTask":174,"./AddTaskButton":175,"./Task":176,"react":171}],178:[function(require,module,exports){
 module.exports = {
-	'baseUrl' : 'http://localhost:3000/api/'
+	'baseUrl' : 'http://lativetasks.herokuapp.com/api/'
 };
 
 },{}],179:[function(require,module,exports){
