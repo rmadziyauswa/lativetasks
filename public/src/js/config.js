@@ -1,3 +1,3 @@
 module.exports = {
-	'baseUrl' : 'http://lativetasks.herokuapp.com/api/'
+	'baseUrl' : 'https://lativetasks.herokuapp.com/api/'
 };
