@@ -139,3 +139,24 @@ text-decoration: line-through;
 {
 	display: none;
 }
+
+#divLogin a
+{
+	display: block;
+	margin: 5px;
+}
+
+
+
+#divLogin
+{
+	text-align: center;
+	color: #d94e41;
+}
+
+
+#divLogin a img.img-thumbnail
+{
+	border: none;
+	background: none;
+}

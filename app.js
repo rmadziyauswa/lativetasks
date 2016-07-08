@@ -12,6 +12,7 @@ var fbAuth = require('./authentication.js');
 
 var config = require('./config.js');
 var cors = require('./cors.js');
+var authenticationcheck = require('./authenticationcheck.js');
 
 var routes = require('./routes/index');
 var api = require('./routes/api');
@@ -66,6 +67,10 @@ passport.deserializeUser(function(id,done){
     });
 
 });
+
+
+app.use(authenticationcheck);
+
 
 app.use('/api', api);
 

@@ -1,4 +1,12 @@
 ﻿extends layout
 
 block content
-	a(href='/auth/facebook') Login With Facebook
+
+	div(class='container-fluid')
+		div(class='row')
+			div(class='col-md-offset-5 col-md-2' id='divLogin')
+				h1 Login With
+				a(href='/auth/facebook' title='Login With Facebook')
+					img(src='/images/facebook.png' class='img-thumbnail')
+				a(href='/auth/twitter' title='Login With Twitter')
+					img(src='/images/twitter.png' class='img-thumbnail')					
