@@ -21844,6 +21844,18 @@ var TaskActions = {
 			task : task
 		});
 
+	},
+	addDummyTask: function(){
+		AppDispatcher.dispatch({
+			actionType:TaskConstants.ADD_DUMMY_TASK
+		});
+	},
+
+	addTask: function(task){
+		AppDispatcher.dispatch({
+			actionType:TaskConstants.ADD_TASK,
+			task:task
+		});
 	}
 
 };
@@ -21851,21 +21863,96 @@ var TaskActions = {
 
 module.exports = TaskActions;
 
-},{"../constants/TaskConstants":178,"../dispatcher/AppDispatcher":179,"../utils/TaskAPI":182}],174:[function(require,module,exports){
+},{"../constants/TaskConstants":179,"../dispatcher/AppDispatcher":180,"../utils/TaskAPI":183}],174:[function(require,module,exports){
+var React = require('react');
+var ReactDOM = require('react-dom');
+var _ = require('underscore');
+var TaskActions = require('../actions/TaskActions');
+
+
+var AddTask = React.createClass({displayName: "AddTask",
+	getInitialState: function()
+	{
+		return {task: {}};
+	},
+
+	componentDidUpdate: function(){
+		
+		ReactDOM.findDOMNode(this.refs.txtTask).focus();
+		
+
+	},
+
+	render:function(){
+
+
+
+					var txtArea = React.createElement("textarea", {className: "txtTask", ref: "txtTask", value: this.state.task.description, onBlur: this._onBlur, onChange: this._onChange});
+
+
+						if(this.props.isNew)
+						{
+
+							return (
+									React.createElement("div", {className: "divAddTask"}, 
+										
+										txtArea
+
+									)
+								)
+
+
+						}else{
+
+
+							return (
+									React.createElement("div", {className: "hidden"}, 
+										
+										txtArea
+
+									)
+								)
+
+
+						}
+	},
+
+	_onBlur: function(e)
+	{
+		var editedTask = _.extend({},this.state.task,{description: e.target.value});
+
+
+			TaskActions.addTask(editedTask);
+			this.setState({ task : {description:''}, isNew : false });
+
+	},
+
+
+	_onChange: function(e)
+	{
+		var editedTask = _.extend({},this.state.task,{description: e.target.value});
+
+		this.setState({task: editedTask });
+	}
+});
+
+module.exports = AddTask;
+},{"../actions/TaskActions":173,"react":171,"react-dom":7,"underscore":172}],175:[function(require,module,exports){
 var React = require('react');
 
 var AddTaskButton = React.createClass({displayName: "AddTaskButton",
 	render:function(){
 
 		return (
-				React.createElement("span", {className: "glyphicon glyphicon-plus"})
+				React.createElement("span", {className: "glyphicon glyphicon-plus btnAddTask", onClick: this.props.onClick})
 			)
 	}
 });
 
 module.exports = AddTaskButton;
-},{"react":171}],175:[function(require,module,exports){
+},{"react":171}],176:[function(require,module,exports){
 var React = require('react');
+var ReactDOM = require('react-dom');
 var _ = require('underscore');
 var TaskActions = require('../actions/TaskActions');
 
@@ -21874,6 +21961,15 @@ var Task = React.createClass({displayName: "Task",
 	getInitialState: function()
 	{
 		return {task : this.props.task};
+	},
+
+	componentDidMount: function()	{
+
+		//implement jquery draggable
+
+		$(ReactDOM.findDOMNode(this)).draggable({cursor: "move"});
+		
+
 	},
 
 	componentWillReceiveProps: function(props){
@@ -21897,7 +21993,7 @@ var Task = React.createClass({displayName: "Task",
 		}
 
 		return (
-				React.createElement("div", {className: "divTask"}, 
+				React.createElement("div", {className: "divTask col-md-4", ref: "divTask", title: "Grab by the top left corner to drag"}, 
 					
 					txtArea, 
 
@@ -21913,9 +22009,30 @@ var Task = React.createClass({displayName: "Task",
 	{
 		var editedTask = _.extend({},this.state.task,{description: e.target.value});
 
-		TaskActions.editTask(editedTask);
+		if(editedTask._id)
+		{
 
-		this.setState({task: editedTask });
+			TaskActions.editTask(editedTask);
+
+
+			this.setState({task: editedTask });
+
+		}
+		else
+		{
+
+			TaskActions.addTask(editedTask);
+			this.setState({ task : null });
+			var domNode = ReactDOM.findDOMNode(this);
+
+			// React.unmountComponentAtNode(domNode);
+
+			$(domNode).remove();
+
+			// console.log(domNode);
+		}
+
+
 	},
 
 
@@ -21945,9 +22062,10 @@ var Task = React.createClass({displayName: "Task",
 });
 
 module.exports = Task;
-},{"../actions/TaskActions":173,"react":171,"underscore":172}],176:[function(require,module,exports){
+},{"../actions/TaskActions":173,"react":171,"react-dom":7,"underscore":172}],177:[function(require,module,exports){
 var React = require('react');
 var AddTaskButton = require('./AddTaskButton');
+var AddTask = require('./AddTask');
 var Task = require('./Task');
 var TaskActions = require('../actions/TaskActions');
 
@@ -21957,22 +22075,27 @@ var TaskStore = require('../stores/TaskStore');
 
 
 function getTasks () {
-	return {tasks : TaskStore.getTasks()};
+	return {tasks : TaskStore.getTasks(), isNew : false };
 }
 
 var TaskList = React.createClass({displayName: "TaskList",
 
 	getInitialState: function(){
 		return getTasks();
+
 	},
 	componentDidMount: function(){
 		TaskStore.addChangeListener(this._onChange);
+
+
 	},
 	componentWillUnmount : function(){
 
 		TaskStore.removeChangeListener(this._onChange);
 	},
 	render:function(){
+
+
 
 		var self = this;
 
@@ -21990,9 +22113,12 @@ var TaskList = React.createClass({displayName: "TaskList",
 
 		return (
 				React.createElement("div", null, 
-					React.createElement(AddTaskButton, null), 
 
-					React.createElement("h3", {className: "heading"}, "List Of Tasks"), 
+					React.createElement("div", {className: "divForAddition"}, 
+						React.createElement(AddTaskButton, {onClick: this.onAddClick}), 
+						React.createElement(AddTask, {isNew: this.state.isNew})
+					), 
+
 					listOfTasks
 				)
 			)
@@ -22009,31 +22135,45 @@ var TaskList = React.createClass({displayName: "TaskList",
 		this.setState(getTasks());
 		
 
+	},
+
+	onAddClick:function(){
+
+		this.setState({tasks : TaskStore.getTasks(), isNew : true }, function(){
+
+		// console.log("TaskList Afta Set state : ", this.state);
+
+		});
+
+
+
+
 	}
 });
 
 module.exports = TaskList;
-},{"../actions/TaskActions":173,"../stores/TaskStore":181,"../utils/TaskAPI":182,"./AddTaskButton":174,"./Task":175,"react":171}],177:[function(require,module,exports){
+},{"../actions/TaskActions":173,"../stores/TaskStore":182,"../utils/TaskAPI":183,"./AddTask":174,"./AddTaskButton":175,"./Task":176,"react":171}],178:[function(require,module,exports){
 module.exports = {
 	'baseUrl' : 'http://localhost:3000/api/'
 };
 
-},{}],178:[function(require,module,exports){
+},{}],179:[function(require,module,exports){
 module.exports = {
 	'GET_TASKS': 'GET_TASKS',
 	'GET_ONE_TASK' : 'GET_ONE_TASK',
-	'CREATE_TASK' : 'CREATE_TASK',
+	'ADD_TASK' : 'ADD_TASK',
 	'EDIT_TASK' : 'EDIT_TASK',
-	'DELETE_TASK' : 'DELETE_TASK'
+	'DELETE_TASK' : 'DELETE_TASK',
+	'ADD_DUMMY_TASK' : 'ADD_DUMMY_TASK'
 };
 
-},{}],179:[function(require,module,exports){
+},{}],180:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 
 var AppDispatcher = new Dispatcher();
 
 module.exports = AppDispatcher;
-},{"flux":3}],180:[function(require,module,exports){
+},{"flux":3}],181:[function(require,module,exports){
 var React = require('react');
 var ReactDOM = require('react-dom');
 
@@ -22044,6 +22184,9 @@ var TaskList= require('./components/TaskList');
 
 //load available tasks
 TaskAPI.getTasks();
+
+
+
 
 
 var App = React.createClass({displayName: "App",
@@ -22059,7 +22202,7 @@ var App = React.createClass({displayName: "App",
 
 
 ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
-},{"./components/TaskList":176,"./utils/TaskAPI":182,"react":171,"react-dom":7}],181:[function(require,module,exports){
+},{"./components/TaskList":177,"./utils/TaskAPI":183,"react":171,"react-dom":7}],182:[function(require,module,exports){
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var TaskAPI = require('../utils/TaskAPI');
 var TaskConstants = require('../constants/TaskConstants');
@@ -22111,6 +22254,18 @@ var TaskStore = _.extend({}, EventEmitter.prototype , {
 		};
 
 	},
+	addDummyTask:function(){
+		var newTask = {description:""};
+
+		_tasks.splice(0,0,newTask);
+
+	},
+
+	addTask: function(task){
+
+		_tasks.push(task);
+	},
+
 	emitChange: function(){
 		this.emit('change');
 	},
@@ -22151,6 +22306,23 @@ AppDispatcher.register(function(action){
 		break;
 
 
+
+		case TaskConstants.ADD_DUMMY_TASK:
+		TaskStore.addDummyTask();
+
+		break;
+
+
+
+
+		case TaskConstants.ADD_TASK:
+		TaskStore.addTask(action.task);
+
+		TaskAPI.addTask(action.task);
+
+		break;
+
+
 	}
 
 
@@ -22161,7 +22333,7 @@ AppDispatcher.register(function(action){
 
 module.exports = TaskStore;
 
-},{"../constants/TaskConstants":178,"../dispatcher/AppDispatcher":179,"../utils/TaskAPI":182,"events":1,"underscore":172}],182:[function(require,module,exports){
+},{"../constants/TaskConstants":179,"../dispatcher/AppDispatcher":180,"../utils/TaskAPI":183,"events":1,"underscore":172}],183:[function(require,module,exports){
 var TaskActions = require('../actions/TaskActions');
 var config = require('../config');
 
@@ -22219,10 +22391,29 @@ module.exports = {
 		});
 
 
-	}
+	},
 
+	addTask: function(task){
+
+
+		var data = task;
+
+
+		$.ajax({
+			url: config.baseUrl + 'tasks',
+			type:'POST',
+			data: data,
+			success: function(task){
+				
+			},
+			error: function(xhr,status,err){
+				console.log('XHR error ', err);
+			}
+		});
+
+	}
 
 
 };
 
-},{"../actions/TaskActions":173,"../config":177}]},{},[180]);
+},{"../actions/TaskActions":173,"../config":178}]},{},[181]);

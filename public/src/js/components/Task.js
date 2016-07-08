@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var _ = require('underscore');
 var TaskActions = require('../actions/TaskActions');
 
@@ -7,6 +8,15 @@ var Task = React.createClass({
 	getInitialState: function()
 	{
 		return {task : this.props.task};
+	},
+
+	componentDidMount: function()	{
+
+		//implement jquery draggable
+
+		$(ReactDOM.findDOMNode(this)).draggable({cursor: "move"});
+		
+
 	},
 
 	componentWillReceiveProps: function(props){
@@ -30,7 +40,7 @@ var Task = React.createClass({
 		}
 
 		return (
-				<div className="divTask">
+				<div className="divTask col-md-4" ref="divTask" title="Grab by the top left corner to drag">
 					
 					{txtArea}
 
@@ -46,9 +56,30 @@ var Task = React.createClass({
 	{
 		var editedTask = _.extend({},this.state.task,{description: e.target.value});
 
-		TaskActions.editTask(editedTask);
+		if(editedTask._id)
+		{
 
-		this.setState({task: editedTask });
+			TaskActions.editTask(editedTask);
+
+
+			this.setState({task: editedTask });
+
+		}
+		else
+		{
+
+			TaskActions.addTask(editedTask);
+			this.setState({ task : null });
+			var domNode = ReactDOM.findDOMNode(this);
+
+			// React.unmountComponentAtNode(domNode);
+
+			$(domNode).remove();
+
+			// console.log(domNode);
+		}
+
+
 	},
 
 

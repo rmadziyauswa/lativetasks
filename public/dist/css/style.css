@@ -1,6 +1,14 @@
 body {
   padding: 50px;
-  font-family: 'Playball', cursive;
+  /*font-family: 'Playball', cursive;*/
+  font-family: 'Courgette', cursive;
+  background-color: #000000;
+  background-image: url('../images/bgWooden.jpg');
+  background-repeat: no-repeat;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+
 }
 
 
@@ -13,9 +21,17 @@ body {
 	background: none;
 	text-align: center;
 	padding: 5%;
-	color: blue;
-	width: 100%;
+	color: #56638C;
+	width: auto;
 	height: auto;
+}
+
+
+
+.txtTask 
+{
+	border: none;
+	outline: none;
 }
 
 .txtCompletedTask 
@@ -28,26 +44,64 @@ body {
 	text-align: center;
 	padding: 5%;
 text-decoration: line-through;
-	width: 100%;
+	width: auto;
 	height: auto;
+}
+
+
+
+.divForAddition
+{
+	max-width: 400px;
+	max-height: 400px;
+	position: absolute;
+	z-index: 10;
+	top: 5%;
+	right: 1%;
+	text-align: center;
+
+}
+
+
+
+.divAddTask
+{
+	background-color: #8C2218;
+	width: auto;
+	height: auto;
+
+
+	box-shadow: -3px 5px 5px 5px #000000;
+}
+
+
+.divAddTask .txtTask
+{
+	color: #F2DF80;
 }
 
 
 .divTask
 {
-	background-color: #F18803;
+	background-color: #f2df80;
 	max-width: 400px;
 	max-height: 400px;
 	width: auto;
 	height: auto;
 	margin: 20px 20px;
 
+
+	background-image: url('../images/bgPaper.jpg');
+	background-repeat: repeat;
+	background-position: top left;
+
+	box-shadow: 3px 5px 2px 2px #221E2A;
+
 }
 
 .divActionIcon .glyphicon
 {
 	font-size: 15px;
-	color: #2793D9;
 	cursor: pointer;
 }
 
@@ -56,4 +110,32 @@ text-decoration: line-through;
 	display: inline-block;
 	width: 60px;
 
+}
+
+
+.btnAddTask {
+  background-color: #d94e41;
+  border-radius: 25px;
+  color: #f2df80;
+  cursor: pointer;
+  font-size: 36px;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+
+.glyphicon-ok{
+	color: #56638C;
+}
+
+
+
+.glyphicon-remove{
+	color: #D94E41;
+}
+
+
+.hidden
+{
+	display: none;
 }

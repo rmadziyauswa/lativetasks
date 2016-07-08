@@ -55,8 +55,27 @@ module.exports = {
 		});
 
 
-	}
+	},
 
+	addTask: function(task){
+
+
+		var data = task;
+
+
+		$.ajax({
+			url: config.baseUrl + 'tasks',
+			type:'POST',
+			data: data,
+			success: function(task){
+				
+			},
+			error: function(xhr,status,err){
+				console.log('XHR error ', err);
+			}
+		});
+
+	}
 
 
 };

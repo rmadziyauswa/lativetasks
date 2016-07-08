@@ -28,6 +28,18 @@ var TaskActions = {
 			task : task
 		});
 
+	},
+	addDummyTask: function(){
+		AppDispatcher.dispatch({
+			actionType:TaskConstants.ADD_DUMMY_TASK
+		});
+	},
+
+	addTask: function(task){
+		AppDispatcher.dispatch({
+			actionType:TaskConstants.ADD_TASK,
+			task:task
+		});
 	}
 
 };

@@ -53,5 +53,5 @@ gulp.task('copy',function(){
 
 
 gulp.task('default',['browserify','copy'],function(){
-	return gulp.watch('./public/src/*.*',['browserify','copy']);
+	gulp.watch('./public/src/**/*.*',['browserify','copy']);
 });

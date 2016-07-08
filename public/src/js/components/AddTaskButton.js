@@ -4,7 +4,7 @@ var AddTaskButton = React.createClass({
 	render:function(){
 
 		return (
-				<span className="glyphicon glyphicon-plus"></span>
+				<span className="glyphicon glyphicon-plus btnAddTask" onClick={this.props.onClick}></span>
 			)
 	}
 });

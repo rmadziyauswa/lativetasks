@@ -1,5 +1,6 @@
 var React = require('react');
 var AddTaskButton = require('./AddTaskButton');
+var AddTask = require('./AddTask');
 var Task = require('./Task');
 var TaskActions = require('../actions/TaskActions');
 
@@ -9,22 +10,27 @@ var TaskStore = require('../stores/TaskStore');
 
 
 function getTasks () {
-	return {tasks : TaskStore.getTasks()};
+	return {tasks : TaskStore.getTasks(), isNew : false };
 }
 
 var TaskList = React.createClass({
 
 	getInitialState: function(){
 		return getTasks();
+
 	},
 	componentDidMount: function(){
 		TaskStore.addChangeListener(this._onChange);
+
+
 	},
 	componentWillUnmount : function(){
 
 		TaskStore.removeChangeListener(this._onChange);
 	},
 	render:function(){
+
+
 
 		var self = this;
 
@@ -42,9 +48,12 @@ var TaskList = React.createClass({
 
 		return (
 				<div>
-					<AddTaskButton />
 
-					<h3 className="heading">List Of Tasks</h3>
+					<div className="divForAddition">
+						<AddTaskButton onClick={this.onAddClick} />
+						<AddTask isNew={this.state.isNew} />
+					</div>
+
 					{listOfTasks}
 				</div>
 			)
@@ -60,6 +69,19 @@ var TaskList = React.createClass({
 
 		this.setState(getTasks());
 		
+
+	},
+
+	onAddClick:function(){
+
+		this.setState({tasks : TaskStore.getTasks(), isNew : true }, function(){
+
+		// console.log("TaskList Afta Set state : ", this.state);
+
+		});
+
+
+
 
 	}
 });

@@ -49,6 +49,18 @@ var TaskStore = _.extend({}, EventEmitter.prototype , {
 		};
 
 	},
+	addDummyTask:function(){
+		var newTask = {description:""};
+
+		_tasks.splice(0,0,newTask);
+
+	},
+
+	addTask: function(task){
+
+		_tasks.push(task);
+	},
+
 	emitChange: function(){
 		this.emit('change');
 	},
@@ -85,6 +97,23 @@ AppDispatcher.register(function(action){
 		TaskStore.editTask(action.task);
 
 		TaskAPI.editTask(action.task);
+
+		break;
+
+
+
+		case TaskConstants.ADD_DUMMY_TASK:
+		TaskStore.addDummyTask();
+
+		break;
+
+
+
+
+		case TaskConstants.ADD_TASK:
+		TaskStore.addTask(action.task);
+
+		TaskAPI.addTask(action.task);
 
 		break;
 

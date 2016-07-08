@@ -4,7 +4,8 @@ var taskSchema = new mongoose.Schema({
     description : String,
     dateAdded : { type: Date, default: Date.now },
     dateCompleted: Date,
-    isCompleted: {type: Boolean, default: false}
+    isCompleted: {type: Boolean, default: false},
+    ownerOAuthID: String
 
 });
 
