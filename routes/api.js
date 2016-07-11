@@ -21,7 +21,7 @@ db.on('error', function (err) {
 /* GET tasks listing. */
 router.get('/tasks', function (req, res) {
     //return all Tasks
-    Task.find(function (err, results) { 
+    Task.find({ownerOAuthID : req.user.oauthID},function (err, results) { 
         if (err) {
             console.log(err);
         }
@@ -53,6 +53,13 @@ router.get('/tasks/:id', function (req, res) {
 //add tasks
 router.post('/tasks', function (req, res) {
     var newTask = new Task(req.body);
+
+    console.log('Logged Auth ID = ', req.user.oauthID);
+
+
+    // Set an oauthID for the new tAsk
+    newTask.ownerOAuthID = req.user.oauthID;
+
         
     newTask.save(function (err) {
         if (err) {

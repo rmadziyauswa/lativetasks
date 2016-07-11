@@ -22155,6 +22155,7 @@ module.exports = TaskList;
 },{"../actions/TaskActions":173,"../stores/TaskStore":182,"../utils/TaskAPI":183,"./AddTask":174,"./AddTaskButton":175,"./Task":176,"react":171}],178:[function(require,module,exports){
 module.exports = {
 	'baseUrl' : 'https://lativetasks.herokuapp.com/api/'
+	// 'baseUrl' : 'http://localhost:3000/api/'
 };
 
 },{}],179:[function(require,module,exports){
@@ -22246,7 +22247,6 @@ var TaskStore = _.extend({}, EventEmitter.prototype , {
 			if(_tasks[i]._id == task._id)
 			{
 
-				//delete it
 				_tasks[i] = _.extend({},_tasks[i],task);
 
 
@@ -22317,6 +22317,8 @@ AppDispatcher.register(function(action){
 
 		case TaskConstants.ADD_TASK:
 		TaskStore.addTask(action.task);
+		
+		console.log(action.task);
 
 		TaskAPI.addTask(action.task);
 

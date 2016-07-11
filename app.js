@@ -25,7 +25,7 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -44,7 +44,6 @@ app.use(express.static(path.join(__dirname, 'public','dist')));
 //passport serializing and deserializing users
 passport.serializeUser(function(user,done){
 
-    console.log('Serializing User : ', user._id);
     done(null,user._id);
 
 
@@ -61,18 +60,12 @@ passport.deserializeUser(function(id,done){
         }else
         {
 
-            console.log('deserializing User : ', user);
             done(null,user);
         }
     });
 
 });
 
-
-app.use(authenticationcheck);
-
-
-app.use('/api', api);
 
 app.get('/login',function(req,res){
 
@@ -82,8 +75,43 @@ app.get('/login',function(req,res){
 
 
 
+
 app.get('/auth/facebook',passport.authenticate('facebook'),function(req,res){});
 app.get('/auth/facebook/callback',passport.authenticate('facebook',{failuerRedirect : '/login'}), function(req,res){ res.redirect('/'); });
+
+
+app.get('/auth/twitter',passport.authenticate('twitter'),function(req,res){});
+app.get('/auth/twitter/callback',passport.authenticate('twitter',{failuerRedirect : '/login'}), function(req,res){ res.redirect('/'); });
+
+
+
+app.use(authenticationcheck);
+
+
+app.get('/',function(req,res){
+
+    
+    res.render('index',{pageTitle : "Lative Tasks"});
+
+
+});
+
+
+
+app.get('/logout',function(req,res){
+
+    req.logout();
+
+    res.redirect('/login');
+
+});
+
+
+
+app.use('/api', api);
+
+
+
 
 
 // catch 404 and forward to error handler

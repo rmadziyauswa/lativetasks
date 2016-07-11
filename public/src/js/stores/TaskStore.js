@@ -41,7 +41,6 @@ var TaskStore = _.extend({}, EventEmitter.prototype , {
 			if(_tasks[i]._id == task._id)
 			{
 
-				//delete it
 				_tasks[i] = _.extend({},_tasks[i],task);
 
 
@@ -112,6 +111,8 @@ AppDispatcher.register(function(action){
 
 		case TaskConstants.ADD_TASK:
 		TaskStore.addTask(action.task);
+		
+		console.log(action.task);
 
 		TaskAPI.addTask(action.task);
 

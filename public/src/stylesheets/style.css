@@ -12,6 +12,14 @@ body {
 }
 
 
+#btnLogOut
+{
+	position: absolute;
+    top: 2px;
+    right: 0px;
+    font-size: 0.9em;
+}
+
 
 .txtTask 
 {
